@@ -12,6 +12,7 @@ import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 contract FinTabToken is SmartToken {
 
   event Transfer(address indexed _from, address indexed _to, uint256 _value, bytes _data);
+  event TransferInited();
   uint public constant INITIAL_SUPPLY = 5000000 * (10 ** 8);
 
   /* The finalizer contract that allows unlift the transfer limits on this token */
@@ -103,7 +104,7 @@ contract FinTabToken is SmartToken {
     return super.transferFrom(_from, _to, _value);
   }
 
-  function burn(uint _value) onlyOwner canTransfer(msg.sender) returns (bool success) {
+  function burn(uint _value) canTransfer(msg.sender) returns (bool success) {
     return super.burn(_value);
   }
 

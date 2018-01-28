@@ -41,9 +41,9 @@ contract('FinTabToken', function(accounts) {
   it("should allow to set releaseAgent by owner", async function () {
     const instance = await FinTabToken.new();
 
-    await instance.setReleaseAgent(accounts[1]);
+    await instance.setReleaseAgent(accounts[0]);
     const releaseAgent = await instance.releaseAgent();
-    assert.equal(releaseAgent, accounts[1])
+    assert.equal(releaseAgent, accounts[0])
   });
 
   it("should not allow to set transferAgent by not owner", async function () {
