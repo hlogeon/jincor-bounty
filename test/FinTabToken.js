@@ -285,4 +285,197 @@ contract('FinTabToken', function(accounts) {
     }
     assert.fail('should have thrown before');
   });
+
+
+  it('verifies that the owner can disable & re-enable transfers', async () => {
+     let token = await FinTabToken.new();
+     await token.disableTransfers(true);
+     let transfersEnabled = await token.transfersEnabled();
+     assert.equal(transfersEnabled, false);
+     await token.disableTransfers(false);
+     transfersEnabled = await token.transfersEnabled();
+     assert.equal(transfersEnabled, true);
+ });
+
+ it('should throw when a non owner attempts to disable transfers', async () => {
+       let token = await FinTabToken.new();
+       try {
+           await token.disableTransfers(true, { from: accounts[1] });
+           assert(false, "didn't throw");
+       }
+       catch (error) {
+           return assertJump(error);
+       }
+       assert.fail('should have thrown before');
+   });
+
+   it('verifies that issue tokens updates the target balance and the total supply', async () => {
+       let token = await FinTabToken.new();
+       await token.issue(accounts[1], 100);
+       let totalSupply = await token.totalSupply();
+       assert.equal(totalSupply, (5000000 * 10 ** 8) + 100);
+       let balance = await token.balanceOf(accounts[1]);
+       assert.equal(balance, 100);
+   });
+
+   it('verifies that the owner can issue tokens', async () => {
+       let token = await FinTabToken.new();
+       await token.issue(accounts[1], 100);
+       let balance = await token.balanceOf(accounts[1]);
+       assert.equal(balance, 100);
+   });
+
+   it('verifies that the owner can issue tokens to his/her own account', async () => {
+       let token = await FinTabToken.new();
+       await token.issue(accounts[0], 100);
+       let balance = await token.balanceOf.call(accounts[0]);
+       assert.equal(balance, (5000000 * 10 ** 8) +100);
+   });
+
+   it('should throw when the owner attempts to issue tokens to an invalid address', async () => {
+       let token = await FinTabToken.new();
+
+       try {
+           await token.issue('0x0', 100);
+           assert(false, "didn't throw");
+       }
+       catch (error) {
+           return assertJump(error);
+       }
+       assert.fail('should have thrown before');
+   });
+
+   it('should throw when the owner attempts to issue tokens to the token address', async () => {
+       let token = await FinTabToken.new();
+
+       try {
+           await token.issue(token.address, 100);
+           assert(false, "didn't throw");
+       }
+       catch (error) {
+         return assertJump(error);
+       }
+       assert.fail('should have thrown before');
+   });
+
+   it('should throw when a non owner attempts to issue tokens', async () => {
+       let token = await FinTabToken.new();
+
+       try {
+           await token.issue(accounts[1], 100, { from: accounts[2] });
+           assert(false, "didn't throw");
+       }
+       catch (error) {
+         return assertJump(error);
+       }
+       assert.fail('should have thrown before');
+   });
+
+
+   it('verifies that destroy tokens updates the target balance and the total supply', async () => {
+        let token = await FinTabToken.new();
+        await token.issue(accounts[1], 100);
+        await token.destroy(accounts[1], 20);
+        let totalSupply = await token.totalSupply();
+        assert.equal(totalSupply, (5000000 * 10 ** 8) + 80);
+        let balance = await token.balanceOf(accounts[1]);
+        assert.equal(balance, 80);
+    });
+
+    it('verifies that the owner can destroy tokens', async () => {
+        let token = await FinTabToken.new();
+        await token.issue(accounts[1], 100);
+        await token.destroy(accounts[1], 20);
+        let balance = await token.balanceOf(accounts[1]);
+        assert.equal(balance, 80);
+    });
+
+    it('verifies that the owner can destroy tokens from his/her own account', async () => {
+        let token = await FinTabToken.new();
+        await token.issue(accounts[0], 100);
+        await token.destroy(accounts[0], 20);
+        let balance = await token.balanceOf(accounts[0]);
+        assert.equal(balance, (5000000 * 10 ** 8) + 80);
+    });
+
+    it('verifies that a holder can destroy tokens from his/her own account', async () => {
+        let token = await FinTabToken.new();
+        await token.issue(accounts[1], 100);
+        await token.destroy(accounts[1], 20);
+        let balance = await token.balanceOf(accounts[1]);
+        assert.equal(balance, 80);
+    });
+
+    it('should throw when a non owner attempts to destroy tokens', async () => {
+        let token = await FinTabToken.new();
+        await token.issue(accounts[1], 100);
+
+        try {
+            await token.destroy(accounts[1], 20, { from: accounts[2] });
+            assert(false, "didn't throw");
+        }
+        catch (error) {
+          return assertJump(error);
+        }
+        assert.fail('should have thrown before');
+    });
+
+    it('verifies the balances after a transfer', async () => {
+        let token = await FinTabToken.new();
+        await token.issue(accounts[1], 10000, { from: accounts[0] });
+        await token.transfer(accounts[2], 500, { from: accounts[1] });
+        let balance;
+        balance = await token.balanceOf(accounts[1]);
+        assert.equal(balance, 9500);
+        balance = await token.balanceOf(accounts[2]);
+        assert.equal(balance, 500);
+    });
+
+
+    it('should throw when attempting to transfer while transfers are disabled', async () => {
+        let token = await FinTabToken.new();
+        await token.transfer(accounts[1], 100);
+        await token.disableTransfers(true);
+        let transfersEnabled = await token.transfersEnabled();
+        assert.equal(transfersEnabled, false);
+        try {
+            await token.transfer(accounts[1], 100);
+            assert(false, "didn't throw");
+        }
+        catch (error) {
+          return assertJump(error);
+        }
+        assert.fail('should have thrown before');
+    });
+
+    it('verifies the allowance after an approval', async () => {
+        let token = await FinTabToken.new();
+        await token.issue(accounts[0], 10000);
+        await token.approve(accounts[1], 500);
+        let allowance = await token.allowance(accounts[0], accounts[1]);
+        assert.equal(allowance, 500);
+    });
+
+    it('should throw when attempting to transfer from while transfers are disabled', async () => {
+        let token = await FinTabToken.new();
+        let balance = await token.balanceOf(accounts[0]);
+        assert.equal(balance, 5000000 * 10 ** 8);
+        await token.approve(accounts[1], 500);
+        let allowance = await token.allowance.call(accounts[0], accounts[1]);
+        assert.equal(allowance, 500);
+        await token.transferFrom(accounts[0], accounts[2], 50, { from: accounts[1] });
+        await token.disableTransfers(true);
+        let transfersEnabled = await token.transfersEnabled();
+        assert.equal(transfersEnabled, false);
+
+        try {
+            await token.transferFrom(accounts[0], accounts[2], 50, { from: accounts[1] });
+            assert(false, "didn't throw");
+        }
+        catch (error) {
+          return assertJump(error);
+        }
+        assert.fail('should have thrown before');
+    });
+
 });
