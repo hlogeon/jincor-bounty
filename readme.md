@@ -13,6 +13,8 @@ In addition to the token changes, we need to implement new functionality like th
 
 1. Bancor Exchange Protocol compatible contract
 2. Token burner which accepts the token, burn one part (90%) and sends another part to team wallet
+![Fintab token burner](https://fintab.io/img/sm-en2.png?v=3)
+
 
 ## Challenges
 The token contract is pretty complicated by the nature because it's built on top of multiple controversial standards which functionality is usually intersects. The most challenging part about this token is to make it easy to read, understand, mainttain and not too expensive in terms of gas usage. Do not loose the benefits from the standards.
