@@ -28,6 +28,11 @@ contract Utils {
         _;
     }
 
+
+    function _validAddress(address _address) internal constant returns (bool) {
+      return  _address != 0x0;
+    }
+
     // Overflow protected math functions
 
     /**

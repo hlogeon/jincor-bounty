@@ -12,10 +12,6 @@ import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 contract FinTabToken is SmartToken {
 
   event Transfer(address indexed _from, address indexed _to, uint256 _value, bytes _data);
-
-  string public constant name = "FinTab";
-  string public constant symbol = "FNTB";
-  uint8 public constant decimals = 8;
   uint public constant INITIAL_SUPPLY = 5000000 * (10 ** 8);
 
   /* The finalizer contract that allows unlift the transfer limits on this token */
@@ -26,6 +22,10 @@ contract FinTabToken is SmartToken {
 
   mapping (address => bool) public teamAddresses;
 
+
+  function name() public constant returns (string) { return "FinTab"; }
+  function symbol() public constant returns (string) { return "FNTB" ;}
+  function decimals() public constant returns (uint8) { return 8; }
 
   /**
    * Limit token transfer for  the team

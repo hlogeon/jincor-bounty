@@ -1,5 +1,5 @@
-var FinTabToken = artifacts.require("./FinTabToken.sol");
+const FinTabToken = artifacts.require("FinTabToken.sol");
 
-module.exports = function(deployer) {
-  deployer.deploy(FinTabToken);
+module.exports = async (deployer) => {
+    await deployer.deploy(FinTabToken);
 };

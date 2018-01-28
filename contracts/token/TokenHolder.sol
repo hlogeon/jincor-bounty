@@ -27,8 +27,11 @@ contract TokenHolder is ITokenHolder, Ownable, Utils {
         @param _to      account to receive the new amount
         @param _amount  amount to withdraw
     */
-    function withdrawTokens(IERC20Token _token, address _to, uint256 _amount) public onlyOwner
+    function withdrawTokens(IERC20Token _token, address _to, uint256 _amount) public
+    onlyOwner
+    validAddress(_to)
     {
+        require(_to != address(this));
         assert(_token.transfer(_to, _amount));
     }
 }
