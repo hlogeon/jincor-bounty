@@ -1,44 +1,33 @@
-# Jincor ICO Contracts
-![](https://travis-ci.org/JincorTech/ico.svg?branch=master)
-![](https://habrastorage.org/webt/59/d5/42/59d542206afbe280817420.png)
+# FinTab Tokens
 
-Baked with <3 by [Jincor](https://ico.jincor.com)
+Baked with <3 by [JincorTech](https://github.com/JincorTech/)
 
-## JCR token functionality
-In order to further the development of the platform, reach breakeven and get to the global market as soon as possible we are going to raise extra funding by running an ICO campaign.
+## FNTB token functionality
+FinTab is the Accounting System for Cryptocurrency Portfolios for funds, traders and investors. The project is currently at the ICO stage. FinTab asked to help them with issuance of the new tokens, adding some advanced functionality, sending the new tokens to the old token holders. Additionally they asked to reissue their ERC20 tokens and some advanced functionality like the following:
 
-Jincor issued 35,000,000 JCR tokens total, most of which will be put on sale. The base cost of tokens will depend on the popularity of the platform, and their holders will be able to share the success of Jincor by getting permanent progressive income.
+1. Bancor Token Protocol compatibility
+2. ERC223 standard support
+3. Token freeze functionality to disable token transfers for the team until the day X comes
 
-In the future, JCR tokens will be essential for the proper platform experience. Whereas it is free for organizations to use the basic functionality of Jincor ecosystem, some features will be available for a fee, which can be paid in JCR tokens only. These premium features include:
+In addition to the token changes, we need to implement new functionality like the following:
 
-1. Digital verification of companies;
-2. Setting up enterprise and individual cryptocurrency accounts;
-3. Getting access to a range of financial instruments, such as bills of credit, colls, overdrafts, factoring and etc.;
+1. Bancor Exchange Protocol compatible contract
+2. Token burner which accepts the token, burn one part (90%) and sends another part to team wallet
 
-Using a construction set for creating and execution of corporate smart contracts (based on labour, property, contractual and other relations);
+## Challenges
+The token contract is pretty complicated by the nature because it's built on top of multiple controversial standards which functionality is usually intersects. The most challenging part about this token is to make it easy to read, understand, mainttain and not too expensive in terms of gas usage. Do not loose the benefits from the standards.
 
-Appealing to a decentralized arbitration system for litigation within the digital jurisdiction.
-To sum up, JCR tokens will serve as a local digital currency, which can be used for paying Jincor fees and mutual corporate payments, just like any other popular cryptocurrency.
+The Burner contract is much more complicated in terms of business rules and logic. In one hand, it should provide a way to  set up the token\usd rate manually. But  in the other hand, we have a requirement to update this price automatically from the exchanges when token hits the market. We should be able to set up at least to plans for users who burn the tokens. Calculate the change and return it to the user.
 
-JCR token is developed on Ethereum’s blockchain and conform to the ERC20 Token Standard.
-
-Important notes:
-
-1. JCR tokens will be sent automatically back to the wallet from which the funds have been sent.
-2. JCR tokens transactions will be limited till ICO end to prevent trading before the ICO ends.
-3. During the pre-ICO ETH is accepted only from wallets compliant with ERC-20 token standard. (recommended to use: MyEtherWallet). Do not send ETH directly from cryptocurrency exchanges (Coinbase, Kraken, Poloniex etc.)!
-4. We'll send back all ETH in case of minimal cap is not collected.
+### Deadlines
+We had 5 business days to implement this and this repository contains the result
 
 ## How to setup development environment and run tests?
 
 1. Install `docker` if you don't have it.
 1. Clone this repo.
 1. Run `docker-compose build --no-cache`.
-1. Run `docker-compose up -d`. 
-You should wait a bit until Oraclize ethereum-bridge initialize. Wait for 
-`Please add this line to your contract constructor:
-OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);`
-message to appear. To check for it run `docker logs ico_oracle_1`.
+1. Run `docker-compose up -d`.
 1. Install dependencies: `docker-compose exec workspace yarn`.
 1. To run tests: `docker-compose exec workspace truffle test`.
 1. To merge your contracts via sol-merger run: `docker-compose exec workspace yarn merge`.
