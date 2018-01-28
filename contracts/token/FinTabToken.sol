@@ -103,11 +103,11 @@ contract FinTabToken is SmartToken {
     return super.transferFrom(_from, _to, _value);
   }
 
-  function burn(uint _value) onlyOwner returns (bool success) {
+  function burn(uint _value) onlyOwner canTransfer(msg.sender) returns (bool success) {
     return super.burn(_value);
   }
 
-  function burnFrom(address _from, uint _value) onlyOwner returns (bool success) {
+  function burnFrom(address _from, uint _value) onlyOwner  canTransfer(_from) returns (bool success) {
     return super.burnFrom(_from, _value);
   }
 
