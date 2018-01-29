@@ -25,7 +25,7 @@ The Burner contract is much more complicated in terms of business rules and logi
 We had 5 business days to implement this and this repository contains the result
 
 ## Architecture
-![Alt text](https://monosnap.com/file/Dae9HNp8FZYbzMTXBJqkiE2X0IE5yU.png)
+![Contract diagram](https://monosnap.com/file/o95vLYEmtyKG5sfLIicUlzsx5QMMv9.png)
 
 ### FinTabToken
 FinTabToken is a complicated contract as it unites many standards at once. The main problem of adopting multiple standards
