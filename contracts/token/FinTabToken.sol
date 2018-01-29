@@ -1,56 +1,51 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.18;
 
 import "./SmartToken.sol";
-import "./ContractReceiver.sol";
-import "zeppelin-solidity/contracts/ownership/Ownable.sol";
+import "../abstract/ContractReceiver.sol";
 
 /**
  * @title FinTabToken
  *
- * @dev Burnable Ownable ERC20 token
+ * @dev Burnable Ownable ERC223(and ERC20-compilant) token with support of
+ * Bancor SmartToken protocol
  */
 contract FinTabToken is SmartToken {
 
-  event Transfer(address indexed _from, address indexed _to, uint256 _value, bytes _data);
-  event TransferInited();
   uint public constant INITIAL_SUPPLY = 5000000 * (10 ** 8);
 
-  /* The finalizer contract that allows unlift the transfer limits on this token */
+  // The finalizer contract that allows unlift the transfer limits on this token
   address public releaseAgent;
 
-  /** A crowdsale contract can release us to the wild if ICO success. If false we are are in transfer lock up period.*/
+  // A crowdsale contract can release us to the wild if ICO success. If false we are are in transfer lock up period.
   bool public released = false;
 
   mapping (address => bool) public teamAddresses;
 
+  event Transfer(address indexed _from, address indexed _to, uint _value, bytes _data);
 
   function name() public constant returns (string) { return "FinTab"; }
   function symbol() public constant returns (string) { return "FNTB" ;}
   function decimals() public constant returns (uint8) { return 8; }
 
-  /**
-   * Limit token transfer for  the team
-   *
-   */
+  // Limit token transfer for  the team
   modifier canTransfer(address _sender) {
     require(released || !teamAddresses[_sender]);
     _;
   }
 
+  // The function can be called only by release agent
   modifier onlyReleaseAgent() {
     require(releaseAgent == msg.sender);
     _;
   }
 
-  /** The function can be called only before or after the tokens have been releasesd */
+  // The function can be called only before or after the tokens have been releasesd
   modifier inReleaseState(bool releaseState) {
     require(releaseState == released);
     _;
   }
 
-  /**
-   * @dev Contructor that gives msg.sender all of existing tokens.
-   */
+  // Token construcor
   function FinTabToken() {
     totalSupply = INITIAL_SUPPLY;
     balances[msg.sender] = INITIAL_SUPPLY;
@@ -58,18 +53,18 @@ contract FinTabToken is SmartToken {
     NewSmartToken(address(this));
   }
 
+  // Owner can set releaseAgent address
   function setReleaseAgent(address _rAgent) onlyOwner inReleaseState(false) public {
     releaseAgent = _rAgent;
   }
 
+  // Release agent can release token
   function release() onlyReleaseAgent inReleaseState(false) public {
     released = true;
   }
 
 
-  /**
-   * Owner can allow a particular address (a crowdsale contract) to transfer tokens despite the lock up period.
-   */
+  // Owner can allow a particular address (a crowdsale contract) to transfer tokens despite the lock up period.
   function setTeamAddress(address addr, bool state) onlyOwner inReleaseState(false) public {
     require(addr != 0x0);
     teamAddresses[addr] = state;
@@ -99,15 +94,18 @@ contract FinTabToken is SmartToken {
     }
   }
 
+  // Transfer on _from behalf
   function transferFrom(address _from, address _to, uint _value) transfersAllowed canTransfer(_from) returns (bool success) {
     // Call Burnable.transferForm()
     return super.transferFrom(_from, _to, _value);
   }
 
+  // Burn tokens
   function burn(uint _value) canTransfer(msg.sender) returns (bool success) {
     return super.burn(_value);
   }
 
+  // Burn tokens on _from behalf
   function burnFrom(address _from, uint _value) onlyOwner  canTransfer(_from) returns (bool success) {
     return super.burnFrom(_from, _value);
   }
@@ -123,7 +121,7 @@ contract FinTabToken is SmartToken {
       return (length>0);
     }
 
-    //function that is called when transaction target is an address
+  //function that is called when transaction target is an address
   function transferToAddress(address _to, uint _value, bytes _data) private canTransfer(msg.sender) returns (bool success) {
     require(balanceOf(msg.sender) >= _value);
     balances[msg.sender] = safeSub(balanceOf(msg.sender), _value);

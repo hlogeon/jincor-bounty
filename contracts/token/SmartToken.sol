@@ -1,17 +1,10 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.18;
 
 import "./Burnable.sol";
-import "./ContractReceiver.sol";
-import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 import './TokenHolder.sol';
 import './interfaces/ISmartToken.sol';
 
-/*
-    Smart Token v0.3
-
-    'Owned' is specified here for readability reasons
-*/
-contract SmartToken is ISmartToken, Ownable, Burnable, TokenHolder {
+contract SmartToken is ISmartToken, Burnable, TokenHolder {
     string public version = '0.3';
 
     bool public transfersEnabled = true;    // true if transfer/transferFrom are enabled, false if not
@@ -19,9 +12,9 @@ contract SmartToken is ISmartToken, Ownable, Burnable, TokenHolder {
     // triggered when a smart token is deployed - the _token address is defined for forward compatibility, in case we want to trigger the event from a factory
     event NewSmartToken(address _token);
     // triggered when the total supply is increased
-    event Issuance(uint256 _amount);
+    event Issuance(uint _amount);
     // triggered when the total supply is decreased
-    event Destruction(uint256 _amount);
+    event Destruction(uint _amount);
 
     // allows execution only when transfers aren't disabled
     modifier transfersAllowed {
@@ -46,7 +39,7 @@ contract SmartToken is ISmartToken, Ownable, Burnable, TokenHolder {
         @param _to         account to receive the new amount
         @param _amount     amount to increase the supply by
     */
-    function issue(address _to, uint256 _amount)
+    function issue(address _to, uint _amount)
         public
         onlyOwner
         validAddress(_to)
@@ -66,7 +59,7 @@ contract SmartToken is ISmartToken, Ownable, Burnable, TokenHolder {
         @param _from       account to remove the amount from
         @param _amount     amount to decrease the supply by
     */
-    function destroy(address _from, uint256 _amount) public {
+    function destroy(address _from, uint _amount) public {
         require(msg.sender == _from || msg.sender == owner); // validate input
 
         balances[_from] = safeSub(balances[_from], _amount);
@@ -88,7 +81,7 @@ contract SmartToken is ISmartToken, Ownable, Burnable, TokenHolder {
 
         @return true if the transfer was successful, false if it wasn't
     */
-    function transfer(address _to, uint256 _value) public transfersAllowed returns (bool success) {
+    function transfer(address _to, uint _value) public transfersAllowed returns (bool success) {
         assert(super.transfer(_to, _value));
         return true;
     }
@@ -104,7 +97,7 @@ contract SmartToken is ISmartToken, Ownable, Burnable, TokenHolder {
 
         @return true if the transfer was successful, false if it wasn't
     */
-    function transferFrom(address _from, address _to, uint256 _value) public transfersAllowed returns (bool success) {
+    function transferFrom(address _from, address _to, uint _value) public transfersAllowed returns (bool success) {
         assert(super.transferFrom(_from, _to, _value));
         return true;
     }

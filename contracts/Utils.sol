@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.18;
 
 /*
     Utilities & Common Modifiers
@@ -11,7 +11,7 @@ contract Utils {
     }
 
     // verifies that an amount is greater than zero
-    modifier greaterThanZero(uint256 _amount) {
+    modifier greaterThanZero(uint _amount) {
         require(_amount > 0);
         _;
     }
@@ -43,8 +43,8 @@ contract Utils {
 
         @return sum
     */
-    function safeAdd(uint256 _x, uint256 _y) internal constant returns (uint256) {
-        uint256 z = _x + _y;
+    function safeAdd(uint _x, uint _y) internal constant returns (uint) {
+        uint z = _x + _y;
         assert(z >= _x);
         return z;
     }
@@ -57,7 +57,7 @@ contract Utils {
 
         @return difference
     */
-    function safeSub(uint256 _x, uint256 _y) internal constant returns (uint256) {
+    function safeSub(uint _x, uint _y) internal constant returns (uint) {
         assert(_x >= _y);
         return _x - _y;
     }
@@ -70,8 +70,8 @@ contract Utils {
 
         @return product
     */
-    function safeMul(uint256 _x, uint256 _y) internal constant returns (uint256) {
-        uint256 z = _x * _y;
+    function safeMul(uint _x, uint _y) internal constant returns (uint) {
+        uint z = _x * _y;
         assert(_x == 0 || z / _x == _y);
         return z;
     }

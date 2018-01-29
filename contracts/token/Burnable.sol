@@ -1,5 +1,5 @@
-pragma solidity ^0.4.11;
-import "zeppelin-solidity/contracts/token/StandardToken.sol";
+pragma solidity ^0.4.18;
+import "zeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
 
 /**
  * @title Burnable

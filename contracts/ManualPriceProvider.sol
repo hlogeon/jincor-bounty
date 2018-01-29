@@ -1,11 +1,14 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.18;
 
 import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./TokenBurner.sol";
 import "./abstract/PriceProvider.sol";
 import "./abstract/PriceReceiver.sol";
 
-
+/**
+ * PriceProvider which allows an owner to set the price manually
+ *
+**/
 contract ManualPriceProvider is PriceProvider {
 
   function ManualPriceProvider(address _receiver) {
@@ -13,7 +16,8 @@ contract ManualPriceProvider is PriceProvider {
     watcher = PriceReceiver(_receiver);
   }
 
-  function setPrice(uint256 _price) public onlyOwner {
+  // Set the current price value
+  function setPrice(uint _price) public onlyOwner {
       require(_price > 0);
       currentPrice = _price;
       if (state == State.Active) {
@@ -21,6 +25,7 @@ contract ManualPriceProvider is PriceProvider {
       }
   }
 
+  // Notify watcher conrtract that price were changed
   function notifyWatcher() internal {
     watcher.receivePrice(currentPrice);
   }
