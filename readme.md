@@ -62,6 +62,8 @@ const config = {
 
 It just looking for `Transfer` events starting from block `config.fromBlock` on the old contract and sends the  same amount of new token when found.
 
+How to run: `docker-compose exec workspace node ./transferBalances.js`. *Make sure you configured the script before running*
+
 ## How to setup development environment and run tests?
 
 1. Install `docker` if you don't have it.
