@@ -3,7 +3,7 @@ module.exports = {
     development: {
       host: "rpc",
       port: 8545,
-      gas: 4712388,
+      gas: 6712388,
       network_id: "*" // Match any network id
     }
   },

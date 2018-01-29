@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.13;
 
 import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./TokenBurner.sol";
@@ -11,7 +11,7 @@ import "./abstract/PriceReceiver.sol";
 **/
 contract ManualPriceProvider is PriceProvider {
 
-  function ManualPriceProvider(address _receiver) {
+  function ManualPriceProvider(address _receiver) public {
     state = State.Active;
     watcher = PriceReceiver(_receiver);
   }

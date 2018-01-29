@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.13;
 
 import '../Utils.sol';
 import './interfaces/IERC20Token.sol';
@@ -15,7 +15,7 @@ import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 contract TokenHolder is ITokenHolder, Ownable, Utils {
 
     // @dev constructor
-    function TokenHolder() {
+    function TokenHolder() public {
     }
 
 

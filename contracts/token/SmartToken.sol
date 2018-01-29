@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.13;
 
 import "./Burnable.sol";
 import './TokenHolder.sol';
@@ -45,7 +45,7 @@ contract SmartToken is ISmartToken, Burnable, TokenHolder {
         validAddress(_to)
         notThis(_to)
     {
-        totalSupply = safeAdd(totalSupply, _amount);
+        totalSupply_ = safeAdd(totalSupply_, _amount);
         balances[_to] = safeAdd(balances[_to], _amount);
 
         Issuance(_amount);
@@ -63,7 +63,7 @@ contract SmartToken is ISmartToken, Burnable, TokenHolder {
         require(msg.sender == _from || msg.sender == owner); // validate input
 
         balances[_from] = safeSub(balances[_from], _amount);
-        totalSupply = safeSub(totalSupply, _amount);
+        totalSupply_ = safeSub(totalSupply_, _amount);
 
         Transfer(_from, this, _amount);
         Destruction(_amount);

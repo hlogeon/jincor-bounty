@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.13;
 
 import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
@@ -71,15 +71,15 @@ contract TokenBurner is Ownable, PriceReceiver, ContractReceiver {
     plan2 = _plan;
   }
 
-  function getPlan2TokenPrice() internal returns (uint) {
+  function getPlan2TokenPrice() internal view returns (uint) {
     return  plan2 * usdPrice * (10 ** 5);
   }
 
-  function getPlan1TokenPrice() internal returns (uint) {
+  function getPlan1TokenPrice() internal view returns (uint) {
     return  plan1 * usdPrice * (10 ** 5);
   }
 
-  function getPlanTokenPrice(uint _value) internal returns (uint) {
+  function getPlanTokenPrice(uint _value) internal view returns (uint) {
     if (_value >= getPlan2TokenPrice()) {
       return  getPlan2TokenPrice();
     }

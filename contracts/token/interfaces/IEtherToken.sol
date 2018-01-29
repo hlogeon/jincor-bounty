@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.13;
 import './ITokenHolder.sol';
 import './IERC20Token.sol';
 
@@ -8,5 +8,5 @@ import './IERC20Token.sol';
 contract IEtherToken is ITokenHolder, IERC20Token {
     function deposit() public payable;
     function withdraw(uint _amount) public;
-    function withdrawTo(address _to, uint _amount);
+    function withdrawTo(address _to, uint _amount) public;
 }

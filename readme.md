@@ -39,6 +39,29 @@ plan by the amount of tokens sent, price of the token using the  PriceProvider. 
 I also added PriceProvider interface and basic implementation of ManualPriceProvider. We use PriceProvider interface in the TokenBurner contract to provide an ability to update the prices and change implementations even after TokenBurner deployment.
 ManualPriceProvider - the basic implementation of PriceProvider interface, allows an owner to set the price manually and notifies watcher abot the changes.
 
+
+## transferBalances.js
+Because of the fact that this token is a replacement for an active and deployed ERC20-token, we need a way to
+send all current token holders the same amounts of the new token. In order to do this, we prepared a small script which is easy to use and configure.
+
+Configuration for the script is located at `/transferBalances.js` and looks like the one bellow:
+
+```
+const config = {
+  web3httpUrl: 'https://ropsten.infura.io/ujGcHij7xZIyz2afx4h2',
+  oldAbi: JSON.parse(fs.readFileSync('./std.abi')), // Old token Contract ABI
+  oldContractAddress: '0x1a164bd1a4bd6f26726dba43972a91b20e7d93be', // Old contract
+  newAbi: JSON.parse(fs.readFileSync('./std.abi')), / /New token Contract ABI
+  newContractAddress: '0x3210e0c3d1e51dd0b41739b2933a0ee33a528142', // New token contract address
+  privateKey: '0x0', // Private key of the owner of new token to sign transactions
+  gas: '50000', // Gas Limit
+  gasPrice: '10', // Gas price
+  fromBlock: 0 // Starting block
+};
+```
+
+It just looking for `Transfer` events starting from block `config.fromBlock` on the old contract and sends the  same amount of new token when found.
+
 ## How to setup development environment and run tests?
 
 1. Install `docker` if you don't have it.

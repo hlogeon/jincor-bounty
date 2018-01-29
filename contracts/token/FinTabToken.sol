@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.13;
 
 import "./SmartToken.sol";
 import "../abstract/ContractReceiver.sol";
@@ -46,8 +46,8 @@ contract FinTabToken is SmartToken {
   }
 
   // Token construcor
-  function FinTabToken() {
-    totalSupply = INITIAL_SUPPLY;
+  function FinTabToken() public {
+    totalSupply_ = INITIAL_SUPPLY;
     balances[msg.sender] = INITIAL_SUPPLY;
     releaseAgent = msg.sender;
     NewSmartToken(address(this));
@@ -71,7 +71,7 @@ contract FinTabToken is SmartToken {
   }
 
   // Function that is called when a user or another contract wants to transfer funds .
-  function transfer(address _to, uint _value, bytes _data) transfersAllowed canTransfer(msg.sender) returns (bool success) {
+  function transfer(address _to, uint _value, bytes _data) transfersAllowed canTransfer(msg.sender) public returns (bool success) {
     if(isContract(_to)) {
         return transferToContract(_to, _value, _data);
     }
@@ -82,7 +82,7 @@ contract FinTabToken is SmartToken {
 
   // Standard function transfer similar to ERC20 transfer with no _data .
   // Added due to backwards compatibility reasons .
-  function transfer(address _to, uint _value) transfersAllowed canTransfer(msg.sender) returns (bool success) {
+  function transfer(address _to, uint _value) transfersAllowed canTransfer(msg.sender) public returns (bool success) {
     //standard function transfer similar to ERC20 transfer with no _data
     //added due to backwards compatibility reasons
     bytes memory empty;
@@ -95,18 +95,18 @@ contract FinTabToken is SmartToken {
   }
 
   // Transfer on _from behalf
-  function transferFrom(address _from, address _to, uint _value) transfersAllowed canTransfer(_from) returns (bool success) {
+  function transferFrom(address _from, address _to, uint _value) transfersAllowed canTransfer(_from) public returns (bool success) {
     // Call Burnable.transferForm()
     return super.transferFrom(_from, _to, _value);
   }
 
   // Burn tokens
-  function burn(uint _value) canTransfer(msg.sender) returns (bool success) {
+  function burn(uint _value) canTransfer(msg.sender) public returns (bool success) {
     return super.burn(_value);
   }
 
   // Burn tokens on _from behalf
-  function burnFrom(address _from, uint _value) onlyOwner  canTransfer(_from) returns (bool success) {
+  function burnFrom(address _from, uint _value) onlyOwner  canTransfer(_from) public returns (bool success) {
     return super.burnFrom(_from, _value);
   }
 
