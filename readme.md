@@ -24,6 +24,21 @@ The Burner contract is much more complicated in terms of business rules and logi
 ### Deadlines
 We had 5 business days to implement this and this repository contains the result
 
+## Architecture
+![Alt text](https://monosnap.com/file/Dae9HNp8FZYbzMTXBJqkiE2X0IE5yU.png)
+
+### FinTabToken
+FinTabToken is a complicated contract as it unites many standards at once. The main problem of adopting multiple standards
+is that they usually do the same things in a different way like `Ownable` vs `Ownership` and `ownerOnly` vs `onlyOwner`. This makes it really hard to keep things consistent in this case.
+
+### TokenBurner
+Token burner contract is aimed to implement business logic where user send ERC223-token to a contract. Contracts calculates the
+plan by the amount of tokens sent, price of the token using the  PriceProvider. If user sends less then the cheapest plan it rejects the transaction. If user sends more then needed contract sends the change back to the user. 90% of received tokens will be burned and 10% will be sent to the team address.
+
+## PriceProvider
+I also added PriceProvider interface and basic implementation of ManualPriceProvider. We use PriceProvider interface in the TokenBurner contract to provide an ability to update the prices and change implementations even after TokenBurner deployment.
+ManualPriceProvider - the basic implementation of PriceProvider interface, allows an owner to set the price manually and notifies watcher abot the changes.
+
 ## How to setup development environment and run tests?
 
 1. Install `docker` if you don't have it.
