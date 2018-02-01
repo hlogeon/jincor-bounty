@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.15;
 
 import "./interfaces/IERC20Token.sol";
 import "zeppelin-solidity/contracts/math/SafeMath.sol";

@@ -1,4 +1,4 @@
-pragma solidity ^0.4.13;
+pragma solidity ^0.4.15;
 
 import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
@@ -33,7 +33,7 @@ contract PriceProvider is Ownable {
     require(newWatcher != 0x0);
     watcher = PriceReceiver(newWatcher);
   }
-  
+
 
   //we need to get back our funds if we don't need this oracle anymore
   function withdraw(address receiver) external onlyOwner inStoppedState {

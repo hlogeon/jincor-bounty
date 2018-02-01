@@ -1,4 +1,4 @@
-pragma solidity ^0.4.13;
+pragma solidity ^0.4.15;
 
 import "./SmartToken.sol";
 import "../abstract/ContractReceiver.sol";
@@ -26,6 +26,14 @@ contract FinTabToken is SmartToken {
   function name() public constant returns (string) { return "FinTab"; }
   function symbol() public constant returns (string) { return "FNTB" ;}
   function decimals() public constant returns (uint8) { return 8; }
+
+  function totalSupply() public constant returns (uint) {
+    return totalSupply_;
+  }
+  function balanceOf(address _owner) public constant returns (uint balance) {
+    require(_owner != 0x0);
+    return balances[_owner];
+  }
 
   // Limit token transfer for  the team
   modifier canTransfer(address _sender) {
@@ -112,7 +120,7 @@ contract FinTabToken is SmartToken {
 
 
   //assemble the given address bytecode. If bytecode exists then the _addr is a contract.
-  function isContract(address _addr) private returns (bool is_contract) {
+  function isContract(address _addr) private view returns (bool is_contract) {
       uint length;
       assembly {
             //retrieve the size of the code on target address, this needs assembly
