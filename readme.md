@@ -48,7 +48,7 @@ Configuration for the script is located at `/transferBalances.js` and looks like
 
 ```
 const config = {
-  web3httpUrl: 'https://ropsten.infura.io/ujGcHij7xZIyz2afx4h2',
+  web3httpUrl: 'https://ropsten.infura.io/infuraAPIKey',
   oldAbi: JSON.parse(fs.readFileSync('./std.abi')), // Old token Contract ABI
   oldContractAddress: '0x1a164bd1a4bd6f26726dba43972a91b20e7d93be', // Old contract
   newAbi: JSON.parse(fs.readFileSync('./std.abi')), / /New token Contract ABI
@@ -63,6 +63,24 @@ const config = {
 It just looking for `Transfer` events starting from block `config.fromBlock` on the old contract and sends the  same amount of new token when found.
 
 How to run: `docker-compose exec workspace node ./transferBalances.js`. *Make sure you configured the script before running*
+
+## ./sendBounty.js
+Customer ask to add a script to send the reward for bounty campaign. This script is looking for `input.csv` file and loads account addresses and amounts of tokens to send and then sends them, signing by private key provided.
+Configuration looks pretty much like `transferBalances.js` config.
+
+```
+const config = {
+  web3httpUrl: 'https://ropsten.infura.io/infuraAPIKey', //ethereum node connection string
+  newAbi: JSON.parse(fs.readFileSync('./std.abi')),  //abi of the token
+  csvPath: './input.csv', //path to csv file
+  tokenContractAddress: '0x1a164bd1a4bd6f26726dba43972a91b20e7d93be', //address of token we are going to send
+  privateKey: '0x3244d69a1f78c29dfe094bdca9fab39cb18b3bae6307020e840089b4a38bedfe', //Private key of the account we are sending tokens from
+  gas: '238850', //limit of gas to be used
+  gasPrice: '4', //gas price
+};
+```
+How to run: `docker-compose exec workspace node ./sendBounty.js`
+
 
 ## How to setup development environment and run tests?
 
