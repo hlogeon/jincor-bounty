@@ -5,10 +5,9 @@ const assertJump = require("zeppelin-solidity/test/helpers/assertJump.js");
 
 contract('TokenBurner', function (accounts) {
   beforeEach(async function () {
-    this.token = await FinTabToken.new();
-    await this.token.setReleaseAgent(accounts[0]);
-    await this.token.release();
+    this.token = await FinTabToken.new('0');
     this.tokenBurner = await TokenBurner.new(this.token.address, accounts[1]);
+    await this.token.setBurner(this.tokenBurner.address, true);
     this.manualPriceProvider = await ManualPriceProvider.new(this.tokenBurner.address);
     await this.tokenBurner.setPriceProvider(this.manualPriceProvider.address);
     await this.manualPriceProvider.setPrice(25);

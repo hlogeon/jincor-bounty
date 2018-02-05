@@ -13,7 +13,8 @@
     "csvtojson": "^1.1.9",
     "ethereumjs-testrpc": "^6.0.3",
     "sol-merger": "^0.1.0",
-    "zeppelin-solidity": "^1.2.0",
-    "web3": "^1.0.0-beta.29"
+    "truffle-hdwallet-provider": "0.0.3",
+    "web3": "^1.0.0-beta.29",
+    "zeppelin-solidity": "^1.2.0"
   }
 }

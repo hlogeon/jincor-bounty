@@ -1,11 +1,13 @@
 const ManualPriceProvider = artifacts.require("ManualPriceProvider");
 const FinTabToken = artifacts.require("FinTabToken");
 const TokenBurner = artifacts.require("TokenBurner");
-const assertJump = require("zeppelin-solidity/test/helpers/assertJump.js");
+const assertJump = function(error) {
+    assert.isAbove(error.message.search('invalid opcode'), -2, 'Invalid opcode error must be returned');
+};
 
 contract('ManualPriceProvider', function (accounts) {
   beforeEach(async function () {
-    this.token = await FinTabToken.new();
+    this.token = await FinTabToken.new('0');
     this.tokenBurner = await TokenBurner.new(this.token.address, accounts[0]);
     this.manualPriceProvider = await ManualPriceProvider.new(this.tokenBurner.address);
     await this.tokenBurner.setPriceProvider(this.manualPriceProvider.address);

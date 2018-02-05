@@ -1,6 +1,5 @@
 pragma solidity ^0.4.15;
 
-import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./TokenBurner.sol";
 import "./abstract/PriceProvider.sol";
 import "./abstract/PriceReceiver.sol";

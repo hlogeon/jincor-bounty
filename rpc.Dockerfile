@@ -6,6 +6,6 @@ RUN mkdir -p /usr/src/rpc
 ADD . /usr/src/rpc
 
 WORKDIR /usr/src/rpc
-RUN yarn
+RUN npm i -g ethereumjs-testrpc@6.0.3
 
-CMD yarn rpc
+CMD testrpc -l 4500000000000 -u 0 -u 1 -u 2

@@ -2,7 +2,7 @@ pragma solidity ^0.4.15;
 
 import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
-import "./token/FinTabToken.sol";
+import "./FinTabToken.sol";
 import "./abstract/PriceReceiver.sol";
 import "./abstract/ContractReceiver.sol";
 
