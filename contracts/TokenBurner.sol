@@ -33,6 +33,12 @@ contract TokenBurner is Ownable, PriceReceiver, ContractReceiver {
     team = _team;
   }
 
+
+
+  /* function () payable {
+     // TODO: check fallback function
+  } */
+
   // Describes what happens when this address receives ERC223 token.
   // In this case we would like to find the correct plan for user
   // By the amount of tokens sent, send the change to the user,

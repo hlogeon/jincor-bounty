@@ -11,7 +11,7 @@ import "./abstract/ContractReceiver.sol";
  */
 contract FinTabToken is SmartToken {
 
-  uint public constant INITIAL_SUPPLY = 3079386683 * (10 ** 5);
+  uint public constant INITIAL_SUPPLY = 3079387 * (10 ** 8);
 
   uint public releaseTokensBlock; //Approximatly will be at 01.07.2018
 
@@ -53,9 +53,9 @@ contract FinTabToken is SmartToken {
 
 
   // Owner can allow a particular address (a crowdsale contract) to transfer tokens despite the lock up period.
-  function setTeamAddress(address addr, bool state) onlyOwner public {
+  function setTeamAddress(address addr, bool _status) onlyOwner public {
     require(addr != 0x0);
-    teamAddresses[addr] = state;
+    teamAddresses[addr] = _status;
   }
 
   function setBurner(address addr, bool state) onlyOwner public {
