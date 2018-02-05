@@ -86,4 +86,8 @@ contract TokenBurner is Ownable, PriceReceiver, ContractReceiver {
     return getPlan1TokenPrice();
   }
 
+  function setTeamAddress(address _team) public onlyOwner {
+    team = _team;
+  }
+
 }
