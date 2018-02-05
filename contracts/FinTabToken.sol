@@ -11,7 +11,7 @@ import "./abstract/ContractReceiver.sol";
  */
 contract FinTabToken is SmartToken {
 
-  uint public constant INITIAL_SUPPLY = 5000000 * (10 ** 8);
+  uint public constant INITIAL_SUPPLY = 3079386683 * (10 ** 5);
 
   uint public releaseTokensBlock; //Approximatly will be at 01.07.2018
 
@@ -119,7 +119,7 @@ contract FinTabToken is SmartToken {
     require(balanceOf(msg.sender) >= _value);
     balances[msg.sender] = safeSub(balanceOf(msg.sender), _value);
     balances[_to] = safeAdd(balanceOf(_to), _value);
-    Transfer(msg.sender, _to, _value, _data);
+    Transfer(msg.sender, _to, _value);
     return true;
   }
 
@@ -130,7 +130,7 @@ contract FinTabToken is SmartToken {
     balances[_to] = safeAdd(balanceOf(_to), _value);
     ContractReceiver receiver = ContractReceiver(_to);
     receiver.tokenFallback(msg.sender, _value, _data);
-    Transfer(msg.sender, _to, _value, _data);
+    Transfer(msg.sender, _to, _value);
     return true;
   }
 }

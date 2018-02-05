@@ -21,8 +21,9 @@ contract TokenBurner is Ownable, PriceReceiver, ContractReceiver {
   uint public usdPrice; //Price tokens per 1 USD
   FinTabToken public token;
   address public team; //team wallet we should send 10% of tokens to
-  uint public plan1 = 1900; //plan 1 price in cents
-  uint public plan2 = 9500; //plan 2 price in cents
+  uint public plan1 = 1900; //plan 1 price in cents +- 10
+  uint public plan2 = 9500; //plan 2 price in cents +- 20
+  uint public burnPercent = 90; //how many percent to be burned
 
   event ReceivedTokens(address _from, uint _value, address _token, uint change, uint team, bytes _data);
 
@@ -36,11 +37,12 @@ contract TokenBurner is Ownable, PriceReceiver, ContractReceiver {
   // In this case we would like to find the correct plan for user
   // By the amount of tokens sent, send the change to the user,
   // burn 90% of tokens and send 10% to the team address
+  // TODO: +- plan price
   function tokenFallback(address _from, uint _value, bytes _data) external {
       require(_value >= getPlan1TokenPrice());
       uint change = _value - getPlanTokenPrice(_value);
-      uint teamAmount = getPlanTokenPrice(_value).div(100).mul(10);
-      uint burn = getPlanTokenPrice(_value).div(100).mul(90);
+      uint teamAmount = getPlanTokenPrice(_value).div(100).mul(100 - burnPercent);
+      uint burn = getPlanTokenPrice(_value).div(100).mul(burnPercent);
       if (change > 0) { //send the change in this case
         token.transfer(_from, change);
       }
@@ -52,6 +54,11 @@ contract TokenBurner is Ownable, PriceReceiver, ContractReceiver {
   // Set the price provider address to allow price updates
   function setPriceProvider(address _provider) external onlyOwner {
     priceProvider = _provider;
+  }
+
+  // Set percent of tookens to be burned
+  function setBurnPercent(uint8 _percent) public onlyOwner {
+    burnPercent = _percent;
   }
 
   // Receive the price and save to contract state
@@ -71,14 +78,17 @@ contract TokenBurner is Ownable, PriceReceiver, ContractReceiver {
     plan2 = _plan;
   }
 
+  // TODO: +- plan price
   function getPlan2TokenPrice() internal view returns (uint) {
     return  plan2 * usdPrice * (10 ** 5);
   }
 
+  // TODO: +- plan price
   function getPlan1TokenPrice() internal view returns (uint) {
     return  plan1 * usdPrice * (10 ** 5);
   }
 
+  // @TODO: +- plan price
   function getPlanTokenPrice(uint _value) internal view returns (uint) {
     if (_value >= getPlan2TokenPrice()) {
       return  getPlan2TokenPrice();
