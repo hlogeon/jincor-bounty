@@ -10,6 +10,10 @@ function sendTransaction(web3, account, input) {
     gasPrice: web3Utils.toWei(input.gasPrice, 'gwei'),
     data: input.data
   };
+  if (input.nonce) {
+    params.nonce = input.nonce;
+  }
+
 
   return new Promise((resolve, reject) => {
     account.signTransaction(params).then(transaction => {
@@ -88,6 +92,9 @@ module.exports.Contract = class Contract {
         gasPrice: input.gasPrice || '0',
         data: method.encodeABI()
       };
+      if (input.nonce) {
+        txInput.nonce = input.nonce;
+      }
       console.log('Estimated gas', estimatedGas);
       return sendTransaction(this.web3, this.account, txInput);
     });

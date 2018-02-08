@@ -4,15 +4,15 @@ const web3Utils = require('web3-utils');
 const helper = require('./helper');
 
 const config = {
-  web3httpUrl: 'https://mainnet.infura.io/ujGcHij7xZIyz2afx4h2',
+  web3httpUrl: 'https://ropsten.infura.io/ujGcHij7xZIyz2afx4h2',
   oldAbi: JSON.parse(fs.readFileSync('./std.abi')),
-  oldContractAddress: '0x0',//'0xe4DAf254422A18cA4C1dE729F9bd35D79f6B7497', //Ignore txs
+  oldContractAddress: '0x1a164bd1a4bd6f26726dba43972a91b20e7d93be',//'0x9D613a7A10CD550C7a0826c6deEcFF6f1B3e9879',//'0xe4DAf254422A18cA4C1dE729F9bd35D79f6B7497', //Ignore txs
   newAbi: JSON.parse(fs.readFileSync('./std.abi')),
-  newContractAddress: '0x0',
-  privateKey: '0x0',
-  gas: '50000',
+  newContractAddress: '0x3210e0c3d1e51dd0b41739b2933a0ee33a528142',//'0x438B914cDd08B01Ca6FFfAF2BBF28828328cc111',
+  privateKey: '0x3244d69a1f78c29dfe094bdca9fab39cb18b3bae6307020e840089b4a38bedfe',//'0x62ea9a34e1682fe0d87299531cf235499e8a5a045e1fea6ce1c19baeca3f0862',
+  gas: '120000',
   gasPrice: '10',
-  fromBlock: 4358920
+  fromBlock: 0
 };
 
 const duplicateTransactions = [
@@ -39,7 +39,7 @@ const balances = {};
 
 fs.appendFileSync('processed.txt', '');
 
-oldContract.getPastEvents('Transfer', config.fromBlock).then((eventResult) => {
+oldContract.getPastEvents('Transfer', config.fromBlock).then(async (eventResult) => {
   const BN = web3.utils.BN;
 
   for(e of eventResult) {
@@ -76,25 +76,26 @@ oldContract.getPastEvents('Transfer', config.fromBlock).then((eventResult) => {
   });
 }).then(async () => {
   let processedCounts = 0;
-  console.log('Try to process:', JSON.stringify(balances, null, '  '));
-  console.log("Balances:", balances);
+  // console.log('Try to process:', JSON.stringify(balances, null, '  '));
   for(b in balances) {
     console.log('-->', processedCounts + 1, b, parseInt(balances[b]) / 10 ** 8);
     processedCounts++;
     try {
-      if (parseInt(balances[b]) !== 0) {
-        // const txHash = await newContract.executeMethod({
-        //   name: 'transfer',
-        //   gas: config.gas,
-        //   gasPrice: config.gasPrice,
-        //   arguments: [b, balances[b]]
-        // });
-        // console.log('Wait transaction', txHash);
+      if (parseInt(balances[b]) > 0) {
+        let nonce = await web3.eth.getTransactionCount(account.address);
+        const txHash = await newContract.executeMethod({
+          name: 'transfer',
+          gas: config.gas,
+          gasPrice: config.gasPrice,
+          arguments: [b, balances[b]],
+          nonce: nonce
+        });
+        console.log('Wait transaction', txHash);
         // await helper.waitTransaction(web3, txHash, 240);
-        // console.log('Confirmed!');
+        console.log('Confirmed!');
       }
 
-      fs.appendFileSync('processed.txt', b + "," + parseInt(balances[b]) / 10 ** 8 + "\n");
+      fs.appendFileSync('processed.txt', b + "\n");
     } catch (e) {
       throw e;
     }
