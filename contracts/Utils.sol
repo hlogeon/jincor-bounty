@@ -1,14 +1,10 @@
-pragma solidity ^0.4.15;
+pragma solidity ^0.4.18;
+
 
 /*
     Utilities & Common Modifiers
 */
 contract Utils {
-    /**
-        constructor
-    */
-    function Utils() public {
-    }
 
     // verifies that an amount is greater than zero
     modifier greaterThanZero(uint _amount) {
@@ -28,12 +24,9 @@ contract Utils {
         _;
     }
 
-
     function _validAddress(address _address) internal pure returns (bool) {
-      return  _address != 0x0;
+        return  _address != 0x0;
     }
-
-    // Overflow protected math functions
 
     /**
         @dev returns the sum of _x and _y, asserts if the calculation overflows

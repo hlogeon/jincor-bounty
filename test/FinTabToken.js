@@ -7,12 +7,11 @@ contract('FinTabToken', function(accounts) {
 
   it("should put 5000000 FNTB to supply and in the first account", async function () {
     const instance = await FinTabToken.new('5860000');
-    console.log("Token!", instance.address);
     const balance = await instance.balanceOf(accounts[0]);
     const supply = await instance.totalSupply();
 
-    assert.equal(balance.valueOf(), 3079386683 * 10 ** 5, "First account (owner) balance must be 35000000");
-    assert.equal(supply.valueOf(), 3079386683 * 10 ** 5, "Supply must be 35000000");
+    assert.equal(balance.valueOf(), '307938700000000', "First account (owner) balance must be 3079387");
+    assert.equal(supply.valueOf(), '307938700000000', "Supply must be 3079387");
   });
 
 
@@ -42,7 +41,7 @@ contract('FinTabToken', function(accounts) {
     await token.setTeamAddress(accounts[0], true);
     await token.transfer(accounts[1], 100 * 10 ** 8);
     const balance0 = await token.balanceOf(accounts[0]);
-    assert.equal(balance0.valueOf(), 3079286683 * 10 ** 5);
+    assert.equal(balance0.valueOf(), '307928700000000');
 
     const balance1 = await token.balanceOf(accounts[1]);
     assert.equal(balance1.valueOf(), 100 * 10 ** 8);
@@ -54,7 +53,7 @@ contract('FinTabToken', function(accounts) {
     await token.transfer(accounts[1], 0.001 * 10 ** 8);
 
     const balance0 = await token.balanceOf(accounts[0]);
-    assert.equal(balance0.valueOf(), (3079386682 * 10 ** 5).toString());
+    assert.equal(balance0.valueOf(), '307938699900000');
 
     const balance1 = await token.balanceOf(accounts[1]);
     assert.equal(balance1.valueOf(), (0.001 * 10 ** 8).toString());
@@ -116,7 +115,7 @@ contract('FinTabToken', function(accounts) {
     await token.transferFrom(accounts[0], accounts[2], 100 * 10 ** 8, {from: accounts[1]});
 
     const balance0 = await token.balanceOf(accounts[0]);
-    assert.equal(balance0.valueOf(), 3079286683 * 10 ** 5);
+    assert.equal(balance0.valueOf(), '307928700000000');
 
     const balance1 = await token.balanceOf(accounts[2]);
     assert.equal(balance1.valueOf(), 100 * 10 ** 8);
@@ -131,10 +130,10 @@ contract('FinTabToken', function(accounts) {
     await token.burn(1000000 * 10 ** 8);
 
     const balance = await token.balanceOf(accounts[0]).valueOf();
-    assert.equal(balance.valueOf(), 2079386683 * 10 ** 5);
+    assert.equal(balance.valueOf(), '207938700000000');
 
     const supply = await token.totalSupply().valueOf();
-    assert.equal(supply.valueOf(), 2079386683 * 10 ** 5);
+    assert.equal(supply.valueOf(), '207938700000000');
   });
 
   it("should not allow to burn more than balance", async function() {
@@ -157,8 +156,8 @@ contract('FinTabToken', function(accounts) {
     const balance = await token.balanceOf(accounts[1]).valueOf();
     assert.equal(balance, 500000 * 10 ** 8);
 
-    const supply = await token.totalSupply().valueOf();
-    assert.equal(supply.valueOf(), 2579386683 * 10 ** 5);
+    const supply = (await token.totalSupply()).valueOf();
+    assert.equal(supply, '257938700000000');
 
     //should not allow to burn more
     try {
@@ -220,11 +219,12 @@ contract('FinTabToken', function(accounts) {
 
    it('verifies that issue tokens updates the target balance and the total supply', async () => {
        let token = await FinTabToken.new('5860000');
+       let supplyBefore = await token.totalSupply();
        await token.issue(accounts[1], 100);
        let totalSupply = await token.totalSupply();
-       assert.equal(totalSupply, (3079386683 * 10 ** 5) + 100);
+       assert.isAbove(totalSupply, supplyBefore);
        let balance = await token.balanceOf(accounts[1]);
-       assert.equal(balance, 100);
+       assert.equal(balance.valueOf(), 100);
    });
 
    it('verifies that the owner can issue tokens', async () => {
@@ -237,8 +237,8 @@ contract('FinTabToken', function(accounts) {
    it('verifies that the owner can issue tokens to his/her own account', async () => {
        let token = await FinTabToken.new('5860000');
        await token.issue(accounts[0], 100);
-       let balance = await token.balanceOf.call(accounts[0]);
-       assert.equal(balance, (3079386683 * 10 ** 5) +100);
+       let balance = await token.balanceOf(accounts[0]);
+       assert.equal(balance.valueOf(), '307938700000100');
    });
 
    it('should throw when the owner attempts to issue tokens to an invalid address', async () => {
@@ -286,7 +286,7 @@ contract('FinTabToken', function(accounts) {
         await token.issue(accounts[1], 100);
         await token.destroy(accounts[1], 20);
         let totalSupply = await token.totalSupply();
-        assert.equal(totalSupply, (3079386683 * 10 ** 5) + 80);
+        assert.equal(totalSupply.valueOf(), '307938700000080');
         let balance = await token.balanceOf(accounts[1]);
         assert.equal(balance, 80);
     });
@@ -304,7 +304,7 @@ contract('FinTabToken', function(accounts) {
         await token.issue(accounts[0], 100);
         await token.destroy(accounts[0], 20);
         let balance = await token.balanceOf(accounts[0]);
-        assert.equal(balance, (3079386683 * 10 ** 5) + 80);
+        assert.equal(balance.valueOf(), '307938700000080');
     });
 
     it('verifies that a holder can destroy tokens from his/her own account', async () => {
@@ -368,7 +368,7 @@ contract('FinTabToken', function(accounts) {
     it('should throw when attempting to transfer from while transfers are disabled', async () => {
         let token = await FinTabToken.new('5860000');
         let balance = await token.balanceOf(accounts[0]);
-        assert.equal(balance, 3079386683 * 10 ** 5);
+        assert.equal(balance.valueOf(), 3079387000 * 10 ** 5);
         await token.approve(accounts[1], 500);
         let allowance = await token.allowance(accounts[0], accounts[1]);
         assert.equal(allowance, 500);

@@ -1,15 +1,18 @@
-pragma solidity ^0.4.15;
+pragma solidity ^0.4.18;
 
 import "./Burnable.sol";
-import './TokenHolder.sol';
-import './interfaces/ISmartToken.sol';
+import "./TokenHolder.sol";
+import "./interfaces/ISmartToken.sol";
+
 
 contract SmartToken is ISmartToken, Burnable, TokenHolder {
-    string public version = '0.3';
+    string public version = "0.3";
 
     bool public transfersEnabled = true;    // true if transfer/transferFrom are enabled, false if not
 
-    // triggered when a smart token is deployed - the _token address is defined for forward compatibility, in case we want to trigger the event from a factory
+    // triggered when a smart token is deployed - the _token address is defined
+    // for forward compatibility, in case we want to trigger the event from a
+    // factory
     event NewSmartToken(address _token);
     // triggered when the total supply is increased
     event Issuance(uint _amount);
@@ -54,7 +57,8 @@ contract SmartToken is ISmartToken, Burnable, TokenHolder {
 
     /**
         @dev removes tokens from an account and decreases the token supply
-        can be called by the contract owner to destroy tokens from any account or by any holder to destroy tokens from his/her own account
+        can be called by the contract owner to destroy tokens from any account
+        or by any holder to destroy tokens from his/her own account
 
         @param _from       account to remove the amount from
         @param _amount     amount to decrease the supply by
@@ -68,8 +72,6 @@ contract SmartToken is ISmartToken, Burnable, TokenHolder {
         Transfer(_from, this, _amount);
         Destruction(_amount);
     }
-
-    // ERC20 standard method overrides with some extra functionality
 
     /**
         @dev send coins
