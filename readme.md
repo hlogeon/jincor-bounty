@@ -21,3 +21,6 @@ const config = {
 ```
 
 In order to specify the addresses and  amount of tokens to send simply modify `input.csv`
+
+#RUN
+`npm run bounty`
