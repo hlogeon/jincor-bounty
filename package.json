@@ -1,24 +1,13 @@
 {
   "scripts": {
-    "rpc": "node startRPC.js",
-    "test": "truffle test",
-    "merge": "node node_modules/sol-merger/bin/sol-merger.js './contracts/*.sol' ./merge",
-    "lint:sol": "solhint contracts/*.sol contracts/*/*.sol test/*.sol test/*/*.sol"
+    "bounty": "node sendBounty"
   },
   "engines": {
     "node": ">=8"
   },
   "dependencies": {
-    "chai": "^4.1.2",
-    "chai-as-promised": "^7.1.1",
     "csvtojson": "^1.1.9",
-    "ethereumjs-testrpc": "^6.0.3",
-    "sol-merger": "^0.1.0",
     "truffle-hdwallet-provider": "0.0.3",
-    "web3": "^1.0.0-beta.29",
-    "zeppelin-solidity": "^1.2.0"
-  },
-  "devDependencies": {
-    "solhint": "1.1.10"
+    "web3": "1.0.0-beta.30"
   }
 }

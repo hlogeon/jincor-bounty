@@ -8,8 +8,8 @@ const config = {
   web3httpUrl: 'https://ropsten.infura.io/ujGcHij7xZIyz2afx4h2',
   newAbi: JSON.parse(fs.readFileSync('./std.abi')),
   csvPath: './input.csv',
-  tokenContractAddress: '0x1a164bd1a4bd6f26726dba43972a91b20e7d93be',
-  privateKey: '0x3244d69a1f78c29dfe094bdca9fab39cb18b3bae6307020e840089b4a38bedfe',
+  tokenContractAddress: '',
+  privateKey: '',
   gas: '238850',
   gasPrice: '4',
 };
@@ -20,11 +20,11 @@ const tokenContract = new helper.Contract(web3, account, config.newAbi, config.t
 const balances = {};
 const addresses = [];
 
+let totalTokensToSend = 0;
 csv().fromFile(config.csvPath).on('csv', (csvRow)=>{
-  console.log("Got row: ", csvRow);
-  addresses.push({account: csvRow[0], amount: csvRow[1]});
+  addresses.push({account: csvRow[1], amount: csvRow[0]});
+  totalTokensToSend += parseInt(csvRow[0], 10);
 });
-
 
 const sendTokens = async (addresses) => {
   for(let address of addresses) {
