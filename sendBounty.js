@@ -22,7 +22,7 @@ const addresses = [];
 
 let totalTokensToSend = 0;
 csv().fromFile(config.csvPath).on('csv', (csvRow)=>{
-  addresses.push({account: csvRow[1], amount: csvRow[0]});
+  addresses.push({account: csvRow[1], amount: parseInt(csvRow[0], 10)});
   totalTokensToSend += parseInt(csvRow[0], 10);
 });
 
@@ -32,7 +32,7 @@ const sendTokens = async (addresses) => {
       name: 'transfer',
       gas: config.gas,
       gasPrice: config.gasPrice,
-      arguments: [address.account, address.amount]
+      arguments: [address.account, address.amount * 10 ** 18]
     });
     console.log('Wait transaction', txHash);
     await helper.waitTransaction(web3, txHash, 240);
