@@ -5,12 +5,12 @@ const helper = require('./helper');
 const csv = require('csvtojson');
 
 const config = {
-  web3httpUrl: 'https://ropsten.infura.io/ujGcHij7xZIyz2afx4h2',
+  web3httpUrl: 'https://mainnet.infura.io/AqW79dWnJH7UkG7wlcbB',
   newAbi: JSON.parse(fs.readFileSync('./std.abi')),
   csvPath: './input.csv',
-  tokenContractAddress: '',
+  tokenContractAddress: '0x5ab14c104ba2771fd2a6ec6f616da1ad41d5b8a7',
   privateKey: '',
-  gas: '238850',
+  gas: '90000',
   gasPrice: '4',
 };
 
@@ -27,18 +27,23 @@ csv().fromFile(config.csvPath).on('csv', (csvRow)=>{
 });
 
 const sendTokens = async (addresses) => {
+  let transactions = [];
   for(let address of addresses) {
+    let nonce = await web3.eth.getTransactionCount(account.address, 'pending');
     const txHash = await tokenContract.executeMethod({
       name: 'transfer',
       gas: config.gas,
       gasPrice: config.gasPrice,
-      arguments: [address.account, address.amount * 10 ** 18]
+      arguments: [address.account, address.amount * 10 ** 18],
+      nonce: nonce
     });
+    transactions.push(txHash);
+    fs.appendFileSync('processed.txt', txHash + "\n");
+
     console.log('Wait transaction', txHash);
     await helper.waitTransaction(web3, txHash, 240);
     console.log('Confirmed!');
-
-    fs.appendFileSync('processed.txt', address.account + "\n");
+    fs.appendFileSync('confirmed.txt', address.amount + "," + address.account + "\n");
   }
 };
 

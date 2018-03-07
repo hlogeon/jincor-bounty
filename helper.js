@@ -2,7 +2,7 @@ const web3Lib = require('web3');
 const web3Utils = require('web3-utils');
 
 module.exports.sendTransaction = sendTransaction;
-function sendTransaction(web3, account, input) {
+async function sendTransaction(web3, account, input) {
   let nonce = await web3.eth.getTransactionCount(account.address, 'pending');
   const params = {
     to: input.to,
@@ -84,14 +84,14 @@ module.exports.Contract = class Contract {
     const method = contractMethod.apply(contractMethod, input.arguments);
 
     return (input.gas ? Promise.resolve(input.gas) : method.estimateGas({ from: input.from })).then((estimatedGas) => {
-      let nonce = await web3.eth.getTransactionCount(account.address, 'pending');
+      // let nonce = await this.web3.eth.getTransactionCount(this.account.address, 'pending');
       const txInput = {
         to: this.addr,
         amount: input.amount || '0',
         gas: estimatedGas || '0',
         gasPrice: input.gasPrice || '0',
         data: method.encodeABI(),
-        nonce: nonce
+        nonce: input.nonce
       };
       console.log('Estimated gas', estimatedGas);
       return sendTransaction(this.web3, this.account, txInput);
