@@ -1,13 +1,20 @@
 # Jincor bounty sender
-This is a script I use to send the tokens earned by bounty hunters during Jincor
+
+
+This is the script I used to send the tokens earned by bounty hunters during Jincor
 ICO campaign. The script can be also used for token airdrops.
 
-#Installation
+# Installation
+
+
 To install the environment all you need to do is to run `npm i`
 
-#Configure
+# Configure
+
+
 In order to Configure the script simply open `./sendBounty.js` file and modify
 the following lines:
+
 ```
 const config = {
   web3httpUrl: 'https://ropsten.infura.io/ujGcHij7xZIyz2afx4h2', // HTTP url of web3 node
@@ -20,7 +27,9 @@ const config = {
 };
 ```
 
+
 In order to specify the addresses and  amount of tokens to send simply modify `input.csv`
 
-#RUN
+# RUN
+
 `npm run bounty`
