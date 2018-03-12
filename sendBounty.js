@@ -16,12 +16,7 @@ const config = {
   gasPrice: process.env.GAS_PRICE,
 };
 
-let web3;
-if (process.env.RPC_TYPE == 'ws') {
-  web3 = new web3Lib(new web3Lib.providers.WebsocketProvider(config.web3Url));
-} else {
-  web3 = new web3Lib(config.web3Url);
-}
+let web3 = new web3Lib(config.web3Url);
 
 
 const account = web3.eth.accounts.privateKeyToAccount(config.privateKey);
