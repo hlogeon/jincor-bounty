@@ -16,11 +16,14 @@ const config = {
   gasPrice: process.env.GAS_PRICE,
 };
 
+let web3;
 if (process.env.RPC_TYPE == 'ws') {
-    const web3 = new Web3.providers.WebsocketProvider(config.rpc.address)
+  web3 = new web3Lib(new web3Lib.providers.WebsocketProvider(config.web3Url));
 } else {
-    const web3 = new web3Lib(config.web3Url);
+  web3 = new web3Lib(config.web3Url);
 }
+
+
 const account = web3.eth.accounts.privateKeyToAccount(config.privateKey);
 const tokenContract = new helper.Contract(web3, account, config.newAbi, config.tokenContractAddress);
 const balances = {};
