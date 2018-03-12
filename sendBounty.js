@@ -7,7 +7,7 @@ require('dotenv').config();
 
 
 const config = {
-  web3httpUrl: 'https://mainnet.infura.io/' + process.env.INFURA_API_KEY, //ujGcHij7xZIyz2afx4h2 AqW79dWnJH7UkG7wlcbB
+  web3Url: process.env.WEB3_URL, //ujGcHij7xZIyz2afx4h2 AqW79dWnJH7UkG7wlcbB
   newAbi: JSON.parse(fs.readFileSync('./std.abi')),
   csvPath: './input.csv',
   tokenContractAddress: process.env.TOKEN,
@@ -16,7 +16,11 @@ const config = {
   gasPrice: process.env.GAS_PRICE,
 };
 
-const web3 = new web3Lib(config.web3httpUrl);
+if (process.env.RPC_TYPE == 'ws') {
+    const web3 = new Web3.providers.WebsocketProvider(config.rpc.address)
+} else {
+    const web3 = new web3Lib(config.web3Url);
+}
 const account = web3.eth.accounts.privateKeyToAccount(config.privateKey);
 const tokenContract = new helper.Contract(web3, account, config.newAbi, config.tokenContractAddress);
 const balances = {};
